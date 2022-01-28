@@ -21,23 +21,7 @@ class Mahasiswa
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
-	public function get_prop()
-	{
-		global $mysqli;
-		$query="SELECT * FROM tbl_properti";
-		$data=array();
-		$result=$mysqli->query($query);
-		while($row=mysqli_fetch_object($result))
-		{
-			$data[]=$row;
-		}
-		$response=array(
-							'message'=>'get sukses',
-							'data' => $data
-		);
-		header('Content-Type: application/json');
-		echo json_encode($response);
-	}
+	
 
 	public function get_mhs($id=0)
 	{
@@ -158,6 +142,27 @@ class Mahasiswa
 				'message' =>'Mahasiswa Deletion Failed.'
 			);
 		}
+		header('Content-Type: application/json');
+		echo json_encode($response);
+	}
+}
+
+class Propreti {
+
+	public function get_prop()
+	{
+		global $mysqli;
+		$query="SELECT * FROM tbl_properti";
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+		}
+		$response=array(
+							'message'=>'get sukses',
+							'data' => $data
+		);
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
