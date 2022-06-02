@@ -1,5 +1,5 @@
 <?php
-require_once "koneksi.php";
+require_once "koneksiuser.php";
 class Mahasiswa 
 {
 
@@ -104,14 +104,14 @@ class Mahasiswa
 				{
 					$response=array(
 						'status' => 1,
-						'message' =>'Mahasiswa Updated Successfully.'
+						'message' =>' Updated Successfully.'
 					);
 				}
 				else
 				{
 					$response=array(
 						'status' => 0,
-						'message' =>'Mahasiswa Updation Failed.'
+						'message' =>' Updation Failed.'
 					);
 				}
 			}else{
@@ -162,6 +162,25 @@ class Propreti {
 		$response=array(
 							'message'=>'get sukses',
 							'data' => $data
+		);
+		header('Content-Type: application/json');
+		echo json_encode($response);
+	}
+}
+class Futsal {
+	public function get_futsal(){
+		global $mysqli;
+		$query="SELECT * FROM user";
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+
+		}
+		$response=array(
+			'message'=>'succes',
+			'data'=> $data
 		);
 		header('Content-Type: application/json');
 		echo json_encode($response);
