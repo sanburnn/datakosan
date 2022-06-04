@@ -2,8 +2,8 @@
 require_once "koneksiuser.php";
 require_once 'koneksi.php';
 require_once 'jwt_utils.php';
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Methods: GET");
 
 
 class Mahasiswa 
@@ -194,43 +194,31 @@ class Futsal {
 	}
 	public function insert_transaksi()
 		{
-			global $mysqli;
-			$arrcheckpost = array('idfutsal' => '', 'nama' => '', 'notelp' => '', 'tanggal' => '', 'jam'   => '', 'satatus' =>'');
-			$hitung = count(array_intersect_key($_POST, $arrcheckpost));
-			if($hitung == count($arrcheckpost)){
-			
-					$result = mysqli_query($mysqli, "INSERT INTO tbl_mahasiswa SET
-					idfutsal = '$_POST[idfutsal]',
-					nama = '$_POST[nama]',
-					notelp = '$_POST[notelp]',
-					tanggal = '$_POST[tanggal]',
-					jam = '$_POST[jam]',
-					satatus = '$_POST[satatus]',
-					");
-					
-					if($result)
-					{
-						$response=array(
-							'status' => 1,
-							'message' =>'Data Added Successfully.'
-						);
-					}
-					else
-					{
-						$response=array(
-							'status' => 0,
-							'message' =>'DATA Addition Failed.'
-						);
-					}
-			}else{
-				$response=array(
-							'status' => 0,
-							'message' =>'Parameter Do Not Match'
-						);
-			}
-			header('Content-Type: application/json');
-			echo json_encode($response);
-		}
+			require_once 'koneksi.php';
+			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+				// get posted data
+				$idfutsal=$_POST['idfutsal'];
+				$nama=$_POST['nama'];
+				$notelp=$_POST['notelp'];
+				$tanggal=$_POST['tanggal'];
+				$jam=$_POST['jam'];
+				$satatus=$_POST['satatus'];
+				$data = json_decode(file_get_contents("php://input", true));
+				
+				$sql = "INSERT INTO transaksi(idfutsal, nama, notelp, tanggal, jam, satatus) VALUES('$idfutsal','$nama','$notelp','$tanggal','$jam','$satatus')";
+				
+				$result = dbQuery($sql);
+				
+				if($result) {
+					//*Add this untuk membuat json lebih bagus
+					$response = array('success' => 'Sukses Menambah Data');
+					header('Content-Type: application/json');
+					echo json_encode($response);
+					//===================================
+				} else {
+					echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
+				}
+		}}
 	public function get_transaksiadmin($id=0)
 	{
 	
@@ -255,6 +243,30 @@ class Futsal {
 		echo json_encode($response);
 
 	}
+	function update_transaksi($id)
+	{
+		require_once 'koneksi.php';
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			// get posted data
+			
+			$satatus=$_POST['satatus'];
+			$data = json_decode(file_get_contents("php://input", true));
+			
+			$sql = "UPDATE transaksi SET satatus =('$satatus') WHERE id_transaksi='$id'";
+			
+			$result = dbQuery($sql);
+			
+			if($result) {
+				//*Add this untuk membuat json lebih bagus
+				$response = array('success' => 'Sukses Menambah Data');
+				header('Content-Type: application/json');
+				echo json_encode($response);
+				//===================================
+			} else {
+				echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
+			}
+	}}
+
 	
 }
 

@@ -4,9 +4,12 @@ $mhs = new Futsal();
 $request_method=$_SERVER["REQUEST_METHOD"];
 switch ($request_method){
     case 'POST':
-        
-            $mhs->insert_transaksi();
-        	
+        if(!empty($_GET["id"]))
+        {
+            $id=intval($_GET["id"]);
+            $mhs->update_transaksi($id);
+        }else{}
+       
         break; 
         default:
 		// Invalid Request Method
