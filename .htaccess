@@ -2,5 +2,7 @@ RewriteEngine On # Turn on the rewriting engine
 RewriteRule ^mahasiswa/?$ mahasiswa.php [NC,L]
 RewriteRule ^properti/?$ properti.php [NC,L]
 RewriteRule ^loginadmin/?$ loginadmin.php [NC,L]
+RewriteRule ^getransaksi/?$ getransaksi.php [NC,L]
 RewriteRule ^lapanganfutsal/?$ lapanganfutsal.php [NC,L]
 RewriteRule ^mahasiswa/([0-9]+)/?$ mahasiswa.php?id=$1 [NC,L]
+RewriteRule ^getransaksi/([0-9]+)/?$ getransaksi.php?id=$1 [NC,L]

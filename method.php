@@ -1,5 +1,11 @@
 <?php
 require_once "koneksiuser.php";
+require_once 'koneksi.php';
+require_once 'jwt_utils.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET");
+
+
 class Mahasiswa 
 {
 
@@ -168,6 +174,7 @@ class Propreti {
 	}
 }
 class Futsal {
+	
 	public function get_futsal(){
 		global $mysqli;
 		$query="SELECT * FROM user";
@@ -185,6 +192,70 @@ class Futsal {
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
+	public function insert_transaksi()
+		{
+			global $mysqli;
+			$arrcheckpost = array('idfutsal' => '', 'nama' => '', 'notelp' => '', 'tanggal' => '', 'jam'   => '', 'satatus' =>'');
+			$hitung = count(array_intersect_key($_POST, $arrcheckpost));
+			if($hitung == count($arrcheckpost)){
+			
+					$result = mysqli_query($mysqli, "INSERT INTO tbl_mahasiswa SET
+					idfutsal = '$_POST[idfutsal]',
+					nama = '$_POST[nama]',
+					notelp = '$_POST[notelp]',
+					tanggal = '$_POST[tanggal]',
+					jam = '$_POST[jam]',
+					satatus = '$_POST[satatus]',
+					");
+					
+					if($result)
+					{
+						$response=array(
+							'status' => 1,
+							'message' =>'Data Added Successfully.'
+						);
+					}
+					else
+					{
+						$response=array(
+							'status' => 0,
+							'message' =>'DATA Addition Failed.'
+						);
+					}
+			}else{
+				$response=array(
+							'status' => 0,
+							'message' =>'Parameter Do Not Match'
+						);
+			}
+			header('Content-Type: application/json');
+			echo json_encode($response);
+		}
+	public function get_transaksiadmin($id=0)
+	{
+	
+		global $mysqli;
+		$query="SELECT * FROM transaksi";
+		if($id != 0)
+		{
+			$query.=" WHERE idfutsal= ".$id;
+		}
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+		}
+		$response=array(
+							'status' => 1,
+							'message' =>'Get Transaksi SUcces.',
+							'data' => $data
+						);
+		header('Content-Type: application/json');
+		echo json_encode($response);
+
+	}
+	
 }
 
  ?>
