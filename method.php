@@ -192,33 +192,36 @@ class Futsal {
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
-	public function insert_transaksi()
-		{
-			require_once 'koneksi.php';
-			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-				// get posted data
-				$idfutsal=$_POST['idfutsal'];
-				$nama=$_POST['nama'];
-				$notelp=$_POST['notelp'];
-				$tanggal=$_POST['tanggal'];
-				$jam=$_POST['jam'];
-				$satatus=$_POST['satatus'];
-				$data = json_decode(file_get_contents("php://input", true));
+	// public function insert_transaksi()
+	// 	{
+	// 		require_once 'koneksi.php';
+	// 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	// 			// get posted data
+	// 			// $idfutsal=$_POST['idfutsal'];
+	// 			// $idpengguna=$_POST['idpengguna'];
+	// 			// $nama=$_POST['nama'];
+	// 			// $notelp=$_POST['notelp'];
+	// 			// $tanggal=$_POST['tanggal'];
+	// 			// $jam=$_POST['jam'];
+	// 			// $satatus=$_POST['satatus'];
+	// 			$data = json_decode(file_get_contents("php://input", true));
 				
-				$sql = "INSERT INTO transaksi(idfutsal, nama, notelp, tanggal, jam, satatus) VALUES('$idfutsal','$nama','$notelp','$tanggal','$jam','$satatus')";
+	// 			$sql = "INSERT INTO transaksi(idfutsal,idpengguna, nama, notelp, tanggal, jam, satatus) VALUES('" . mysqli_real_escape_string($dbConn , $data->idfutsal) ."',
+	// 			'". mysqli_real_escape_string($dbConn, $data->idpengguna)."','".mysqli_real_escape_string($dbConn, $data->nama)."',
+	// 			'". mysqli_real_escape_string($dbConn, $data->notelp)."','". mysqli_real_escape_string($dbConn, $data->tanggal)."','". mysqli_real_escape_string($dbConn, $data->jam)."','". mysqli_real_escape_string($dbConn, $data->satatus)."')";
 				
-				$result = dbQuery($sql);
+	// 			$result = dbQuery($sql);
 				
-				if($result) {
-					//*Add this untuk membuat json lebih bagus
-					$response = array('success' => 'Sukses Menambah Data');
-					header('Content-Type: application/json');
-					echo json_encode($response);
-					//===================================
-				} else {
-					echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
-				}
-		}}
+	// 			if($result) {
+	// 				//*Add this untuk membuat json lebih bagus
+	// 				$response = array('success' => 'Sukses Menambah Data');
+	// 				header('Content-Type: application/json');
+	// 				echo json_encode($response);
+	// 				//===================================
+	// 			} else {
+	// 				echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
+	// 			}
+	// 	}}
 	public function get_transaksiadmin($id=0)
 	{
 	
@@ -266,8 +269,51 @@ class Futsal {
 				echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
 			}
 	}}
-
+	public function get_transaksiuser($id=0)
+	{
 	
+		global $mysqli;
+		$query="SELECT * FROM transaksi";
+		if($id != 0)
+		{
+			$query.=" WHERE idpengguna= ".$id;
+		}
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+		}
+		$response=array(
+							'status' => 1,
+							'message' =>'Get Transaksi SUcces.',
+							'data' => $data
+						);
+		header('Content-Type: application/json');
+		echo json_encode($response);
+
+	}
+	function delete_transaksi($id)
+	{
+		global $mysqli;
+		$query="DELETE FROM transaksi WHERE id_transaksi=".$id;
+		if(mysqli_query($mysqli, $query))
+		{
+			$response=array(
+				'status' => 1,
+				'message' =>'Transaksi Deleted Successfully.'
+			);
+		}
+		else
+		{
+			$response=array(
+				'status' => 0,
+				'message' =>'Transaksi Deletion Failed.'
+			);
+		}
+		header('Content-Type: application/json');
+		echo json_encode($response);
+	}
 }
 
  ?>

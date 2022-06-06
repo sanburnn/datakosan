@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = $row['id_pengguna'];
 		
 		$headers = array('alg'=>'HS256','typ'=>'JWT');
-		$payload = array('username'=>$username, 'id_futsal'=>$id,'exp'=>(time() + 60 * 60 * 24 * 60));
+		$payload = array('username'=>$username, 'id_pengguna'=>$id,'exp'=>(time() + 60 * 60 * 24 * 60));
 
 		$jwt = generate_jwt($headers, $payload);
         $response = array('message' => 'succes',
