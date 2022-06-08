@@ -16,3 +16,6 @@ RewriteRule ^getransaksi/([0-9]+)/?$ getransaksi.php?id=$1 [NC,L]
 RewriteRule ^transaksiuser/([0-9]+)/?$ transaksiuser.php?id=$1 [NC,L]
 RewriteRule ^getfasilitasuser/([0-9]+)/?$ getfasilitasuser.php?id=$1 [NC,L]
 RewriteRule ^updatetransaksi/([0-9]+)/?$ updatetransaksi.php?id=$1 [NC,L]
+RewriteRule ^updatefotolap/([0-9]+)/?$ updatefotolap.php?id=$1 [NC,L]
+
+RewriteRule ^getjadwaluser/([0-9]+)/?$ getjadwaluser.php?id=$1 [NC,L]

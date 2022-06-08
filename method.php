@@ -338,6 +338,110 @@ class Futsal {
 		echo json_encode($response);
 
 	}
+	public function get_jadwaluser($id=0)
+	{
+	
+		global $mysqli;
+		$query="SELECT * FROM transaksi";
+		if($id != 0)
+		{
+			$query.=" WHERE idfutsal='$id' AND satatus='succes' ";
+		}
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+		}
+		$response=array(
+							'status' => 1,
+							'message' =>'Get Jadwal Success.',
+							'data' => $data
+						);
+		header('Content-Type: application/json');
+		echo json_encode($response);
+
+	}
+	function update_fotolap($id)
+	
+	{
+	header("Content-Type: application/json");
+	header("Acess-Control-Allow-Origin: *");
+	header("Acess-Control-Allow-Methods: POST");
+	header("Acess-Control-Allow-Headers: Acess-Control-Allow-Headers,Content-Type,Acess-Control-Allow-Methods, Authorization");
+	$data = json_decode(file_get_contents("php://input"), true); // collect input parameters and convert into readable format
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			
+			require_once 'koneksi.php';
+			$fileName  =  $_FILES['sendimage']['name'];
+			$tempPath  =  $_FILES['sendimage']['tmp_name'];
+			$fileSize  =  $_FILES['sendimage']['size'];
+			
+		
+			if(empty($fileName))
+			{
+			$errorMSG = json_encode(array("message" => "please select image", "status" => false));	
+			echo $errorMSG;
+			}
+			else
+			{
+			$upload_path = 'fotofutsal/'; // set upload folder path 
+	
+			$fileExt = strtolower(pathinfo($fileName,PATHINFO_EXTENSION)); // get image extension
+		
+	// valid image extensions
+			$valid_extensions = array('jpeg', 'jpg', 'png', 'gif'); 
+					
+	// allow valid image file formats
+			if(in_array($fileExt, $valid_extensions))
+			{				
+		//check file not exist our upload folder path
+			if(!file_exists($upload_path . $fileName))
+			{
+			// check file size '5MB'
+			if($fileSize < 5000000){
+				move_uploaded_file($tempPath, $upload_path . $fileName); // move file from system temporary path to our upload folder path 
+			}
+			else{		
+				$errorMSG = json_encode(array("message" => "Sorry, your file is too large, please upload 5 MB size", "status" => false));	
+				echo $errorMSG;
+			}
+			}
+			else
+			{		
+			$errorMSG = json_encode(array("message" => "Sorry, file already exists check upload folder", "status" => false));	
+			echo $errorMSG;
+			}
+			}
+			else
+			{		
+			$errorMSG = json_encode(array("message" => "Sorry, only JPG, JPEG, PNG & GIF files are allowed", "status" => false));	
+			echo $errorMSG;		
+			}
+			}
+		
+	// if no error caused, continue ....
+			if(!isset($errorMSG))
+			{
+				$sql = "UPDATE user SET foto=('$fileName') WHERE id_futsal='$id'";
+				$result = dbQuery($sql);
+			
+				if($result) {
+					//*Add this untuk membuat json lebih bagus
+					$response = array('success' => 'Sukses Mengubah Foto');
+					header('Content-Type: application/json');
+					echo json_encode($response);
+					//===================================
+				} else {
+					echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
+				}
+			
+			
+			
+				// echo json_encode(array("message" => "Image Uploaded Successfully", "status" => true));	
+			}
+			
+	}}
 }
 
  ?>
