@@ -314,6 +314,30 @@ class Futsal {
 		header('Content-Type: application/json');
 		echo json_encode($response);
 	}
+	public function get_fasilitasuser($id=0)
+	{
+	
+		global $mysqli;
+		$query="SELECT * FROM fasilitas";
+		if($id != 0)
+		{
+			$query.=" WHERE idfutsalap= ".$id;
+		}
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+		}
+		$response=array(
+							'status' => 1,
+							'message' =>'Get Fasilitas SUcces.',
+							'data' => $data
+						);
+		header('Content-Type: application/json');
+		echo json_encode($response);
+
+	}
 }
 
  ?>
