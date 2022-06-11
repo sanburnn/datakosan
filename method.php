@@ -524,6 +524,77 @@ class Futsal {
 			}
 			
 	}}
+	public function get_hari($id=0)
+	{
+	
+		global $mysqli;
+		$query="SELECT * FROM hari";
+		if($id != 0)
+		{
+			$query.=" WHERE idfutsalhari= ".$id;
+		}
+		$data=array();
+		$result=$mysqli->query($query);
+		while($row=mysqli_fetch_object($result))
+		{
+			$data[]=$row;
+		}
+		$response=array(
+							'status' => 1,
+							'message' =>'Get Hari SUcces.',
+							'data' => $data
+						);
+		header('Content-Type: application/json');
+		echo json_encode($response);
+
+	}
+	function update_hari($id)
+	{
+	require_once 'koneksi.php';
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		// get posted data
+		
+		$tanggal=$_POST['tanggal'];
+		$data = json_decode(file_get_contents("php://input", true));
+		
+		$sql = "UPDATE hari SET tanggal =('$tanggal') WHERE id_hari='$id'";
+		
+		$result = dbQuery($sql);
+		
+		if($result) {
+			//*Add this untuk membuat json lebih bagus
+			$response = array('success' => 'Sukses Merubah Tanggal');
+			header('Content-Type: application/json');
+			echo json_encode($response);
+			//===================================
+		} else {
+			echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
+		}
+	}}
+	function update_statusjam($id)
+	{
+	require_once 'koneksi.php';
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		// get posted data
+		
+		$satatus=$_POST['satatus'];
+		$data = json_decode(file_get_contents("php://input", true));
+		
+		$sql = "UPDATE jadwal SET satatus =('$satatus') WHERE idjadwal='$id'";
+		
+		$result = dbQuery($sql);
+		
+		if($result) {
+			//*Add this untuk membuat json lebih bagus
+			$response = array('success' => 'Sukses Merubah Status');
+			header('Content-Type: application/json');
+			echo json_encode($response);
+			//===================================
+		} else {
+			echo json_encode(array('error' => 'Something went wrong, please contact administrator'));
+		}
+	}}
 }
+
 
  ?>
